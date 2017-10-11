@@ -1,4 +1,5 @@
 :: This file has been sanitized so it won't work!
+:: This script assumes you have AWS CLI and an IAM account that has no permission restrictions
 :: Get all active restserver.log files from the 6 servers via zip files and downloads them to the %downloaddir% directory
 :: by bkelley 2017/10/11  Version 2.0 (Added CALL functions)
 @echo off
@@ -127,7 +128,7 @@ IF NOT EXIST "%downloaddir%%ziptoget%" (
 EXIT /B
 
 :finish
-%SystemRoot%\explorer.exe "%downloaddir%
+%SystemRoot%\explorer.exe "%downloaddir%"
 color 2F
 echo.
 echo ~@~@~@~@~
