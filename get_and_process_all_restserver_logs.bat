@@ -1,6 +1,6 @@
 @echo off
 ::By bkelley 2017/08/11 - 2017/10/09 For restserver.log files (Version 1.0!  Woo!)
-:: This batch file has been 'vagued' up since it's on Github, so it's currently broken!
+:: This batch file has been 'sanitized/vagued up' since it's on Github, so it's currently broken!
 :: The purpose of this script is to allow for easy restserver.log pulling and string finding so we can update the excel document.
 :: See more documentation about the whole process in "Documentation.docx"
 :: This script pulls logs from the "" S3 bucket and Static External and Internal servers. 
