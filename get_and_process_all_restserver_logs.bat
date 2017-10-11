@@ -55,7 +55,7 @@ REM set serveripInternal=10.10.10.20
 :: @@@@@@@@@@@@@@@@@@@@@@@
 
 echo.
-echo Hello^^! This script is for gathering 'certin' info from the restserver.log files.
+echo Hello^^! This script is for gathering 'certain' info from the restserver.log files.
 echo.
 echo We can pull a certain day's log files by specifying the YEAR, MONTH, and DAY.
 echo The MONTH and DAY inputs have to be in at least a double-digit format. ^(e.g. "02"^)
