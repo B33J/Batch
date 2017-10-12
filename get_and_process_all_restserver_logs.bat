@@ -1409,7 +1409,7 @@ IF NOT "%restserverCount%" EQU "" (
 						)
 						echo.
 						echo %line%
-						echo Opening %filename% so you can update it.
+						echo Opening !filename! so you can update it.
 						echo While the document is open, this script will pause.
 						echo Make sure to save and close the document to continue this script.
 						echo.
