@@ -18,6 +18,15 @@ echo Getting current IP addresses since they change...
 echo.
 :: External Static
 FOR /F "tokens=4 USEBACKQ" %%n IN (`aws ec2 describe-instances --filters Name^=tag:Name^,Values^=External_Static ^| findstr /C:"PRIVATEIPADDRESSES"`) DO set EXstaticIP=%%n
+:: Do some error handling in case this script is run and the user doens't have AWS CLI, or the right permissions, or etc.
+IF "%EXstaticIP%" == "" (
+	echo.
+	echo There was an error trying to get an IP address.
+	echo We have to abort^!
+	echo.
+	pause
+	goto quit
+)
 echo %EXstaticIP%
 :: External AS1a
 FOR /F "tokens=4 USEBACKQ" %%n IN (`aws ec2 describe-instances --filters Name^=tag:Name^,Values^=External_AS Name^=availability-zone^,Values^=us-east-1a ^| findstr /C:"PRIVATEIPADDRESSES"`) DO set EXas1aIP=%%n
