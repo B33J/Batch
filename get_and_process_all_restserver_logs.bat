@@ -329,7 +329,8 @@ IF NOT EXIST %zipdirectory% (
 	echo.
 	echo Cancelling script...
 	echo.
-	timeout /t 4>nul	pause
+	timeout /t 4>nul	
+	pause
 	goto quit
 )
 :after7zipcheck
