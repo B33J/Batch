@@ -22,7 +22,7 @@ IF "%maxguess%" == "exit" goto quit
 IF "%maxguess%" == "quit" goto quit
 ::set the max possible guess in "max" is input
 IF "%maxguess%" == "max" set maxguess=32767
-::prevent 32 bit int overflow
+::prevent the user from inputting a number higher than what the %random% function can do
 IF "%maxguess%" GTR "32767" (
 	echo.
 	echo #############
