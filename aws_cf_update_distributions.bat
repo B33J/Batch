@@ -18,7 +18,10 @@ set workdir=C:\bkelley_scripts\cloudfront
 set sourcefile=%workdir%\list_of_IDs.txt
 set downloadfile=tmp_file.json
 set tempfile=temp_file.json
-set newTTLvar=1000
+:: What "MaxTTL" value to find and replace in the distributions
+set MaxTTLvar=900
+:: What new value to change the MaxTTL value to
+set newTTLvar=86400
 :: END VARIABLES
 
 FOR /F "tokens=* USEBACKQ" %%A IN (%sourcefile%) DO set /a countDistIDs+=1
@@ -45,14 +48,14 @@ FOR /F "tokens=2 USEBACKQ delims= " %%H IN (`findstr ETag %workdir%\%tempfile%`)
 	echo ETag value is: !ETagvar!
 	echo.
 )
+:: Below is not exactly needed in this script. I'd rather find a specific current MaxTTL value to replace instead of finding the last value in the file to replace.
 :: Scan the downloaded file for its MaxTTL value
-FOR /F "tokens=2 USEBACKQ delims= " %%I IN (`findstr MaxTTL %workdir%\%tempfile%`) DO (
-	set MaxTTLvar=%%I
-	REM Format the variable to be cleaner
-	set MaxTTLvar=!MaxTTLvar:~,-1!
-	echo MaxTTL value is: !MaxTTLvar!
-	echo.
-)
+REM FOR /F "tokens=2 USEBACKQ delims= " %%I IN (`findstr MaxTTL %workdir%\%tempfile%`) DO (
+	REM set MaxTTLvar=%%I
+	REM set MaxTTLvar=!MaxTTLvar:~,-1!
+	REM echo MaxTTL value is: !MaxTTLvar!
+	REM echo.
+REM )
 echo We want to change the MaxTTL value to !newTTLvar!
 echo.
 
