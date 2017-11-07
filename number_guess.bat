@@ -118,7 +118,7 @@ if %intguess% LSS %answer% (
 	echo.
 	echo.
 	echo @#@#@#@#@
-	echo The number to guess is higher than that^^!
+	echo The number to guess is higher than %intguess%^^!
 	echo.
 	goto guess
 )
@@ -126,7 +126,7 @@ if %intguess% GTR %answer% (
 	echo.
 	echo.
 	echo @#@#@#@#@
-	echo The number to guess is lower than that^^!
+	echo The number to guess is lower than %intguess%^^!
 	echo.
 	goto guess
 )
@@ -148,10 +148,10 @@ IF %intguess% EQU %answer% (
 )
 
 echo None of the IF statements worked. How did you do that?
-pause.
+pause
 goto guess
 
 :quit
 echo.
-echo Okay bye!
+echo Okay bye^^!
 echo.
