@@ -3,10 +3,11 @@
 :: Use a list of Distribution IDs to specify which ones to update. See "sourcefile" variable below.
 @echo off
 setlocal EnableDelayedExpansion
+cls
 
 :: VARIABLES
-cls
-:: Set my user profile for AWS CLI. If you're not me and your default AWS CLI account has access to "account", delete the line immediately below
+
+:: Set my user profile for AWS CLI
 set "setProfile=--profile default"
 :: Distribution ID
 set distID=
@@ -19,6 +20,7 @@ set sourcefile=%workdir%\list_of_IDs.txt
 set downloadfile=tmp_file.json
 set tempfile=temp_file.json
 
+:: Of the next variables below, make sure to keep a quotation mark on the end
 :: First set of strings to change
 set "changevaluefrom=\"ViewerProtocolPolicy\": \"allow-all\""
 set "changevalueto=\"ViewerProtocolPolicy\": \"redirect-to-https\""
@@ -38,7 +40,7 @@ IF NOT EXIST %sourcefile% (
 	goto quit
 )
 :: Count the number of Distribution IDs in the source file
-FOR /F "tokens=* USEBACKQ" %%A IN (%sourcefile%) DO set /a countDistIDs+=1
+FOR /F "tokens=*" %%A IN (%sourcefile%) DO set /a countDistIDs+=1
 IF "%countDistIDs%" == "" (
 	echo.
 	echo Hey, the list of Distribution IDs to use is empty.
@@ -53,7 +55,7 @@ echo.
 echo.
 
 :: The main loop that sets the distID and calls the main work
-FOR /F "tokens=* USEBACKQ" %%B IN (%sourcefile%) DO (
+FOR /F "tokens=*" %%B IN (%sourcefile%) DO (
 	set distID=%%B
 	CALL :MAINPROCESS
 )
@@ -100,7 +102,7 @@ echo ~Changing "match-viewer" to "https-only"
 echo.
 Powershell -C "(Get-Content %workdir%\%tempfile%) -replace '%changevalue2from%', '%changevalue2to%' | Set-Content %workdir%\%tempfile%"
 
-:: Remove <"ETag": "",> and <"DistributionConfig": {> lines
+:: Remove <"ETag": "",> and <"DistributionConfig": {> lines (to get the config format to work with CloudFront properly)
 echo ~Removing ETag and DistributionConfig lines...
 echo.
 type %workdir%\%tempfile% | findstr /v "ETag" | findstr /v "DistributionConfig" > %workdir%\tmp.json
@@ -108,14 +110,14 @@ timeout /t 1 >nul
 type %workdir%\tmp.json > %workdir%\%tempfile%
 del %workdir%\tmp.json
 
-:: Remove the last line of the file which is a curly bracket
+:: Remove the last line of the file which is a curly bracket (as above, to get the format right)
 echo ~Removing last curly bracket in the file
 echo.
 Powershell -C "$path = '%workdir%\%tempfile%'; $file = Get-Content $path -ReadCount 0; Set-Content $path -Value ($file | Select-Object -First ($file.count - 1))"
 
 :: Then update the distribution with the edited json file
 echo.
-echo ~Sending the updated config file up to AWS...
+echo ~Sending the updated config file up to CloudFront...
 echo.
 aws cloudfront update-distribution --id %distID% %setProfile% --distribution-config file://%workdir%\%tempfile% --if-match !ETagvar! >nul
 
@@ -126,11 +128,10 @@ timeout /t 2 >nul
 
 EXIT/B
 
-
 :quit
 echo.
 echo Finished script.
 echo.
-:: pause
+pause
 color 0F
 GOTO:EOF
